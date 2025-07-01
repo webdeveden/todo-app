@@ -1,0 +1,6 @@
+/* index.css or App.css */
+@import "react-datepicker/dist/react-datepicker.css";
+
+body {
+  padding: 20px;
+}
