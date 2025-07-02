@@ -232,15 +232,14 @@ function App() {
               onComplete={handleComplete}
             />
           </CardBody>
+          {complete.length > 0 && (
+            <CompletedList
+              completedList={showCompleted ? complete : []}
+              onSelect={toggleShowCompleted}
+              onUndo={handleUndo}
+            />
+          )}
         </Card>
-
-        {complete.length > 0 && (
-          <CompletedList
-            completedList={showCompleted ? complete : []}
-            onSelect={toggleShowCompleted}
-            onUndo={handleUndo}
-          />
-        )}
       </GridItem>
     </Grid>
   );
