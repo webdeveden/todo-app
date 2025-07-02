@@ -1,6 +1,13 @@
-import { List, ListItem, ListIcon, HStack, Tooltip } from "@chakra-ui/react";
+import {
+  List,
+  ListItem,
+  ListIcon,
+  HStack,
+  Tooltip,
+  Show,
+} from "@chakra-ui/react";
 import { FaRegCircle } from "react-icons/fa";
-import { MdDeleteForever } from "react-icons/md";
+import { MdDeleteForever, MdOutlineDoneOutline } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 // import { MdOutlineDoneOutline } from "react-icons/md";
 
@@ -16,7 +23,7 @@ interface TodoListProps {
   onComplete?: (id: number) => void;
 }
 
-const TodoList = ({ todos, ondelete, onUpdate }: TodoListProps) => {
+const TodoList = ({ todos, ondelete, onUpdate, onComplete }: TodoListProps) => {
   // if (todos.length === 0) {
   //   return <p>There is nothing to do. Take a break...</p>;
   // }
@@ -36,14 +43,16 @@ const TodoList = ({ todos, ondelete, onUpdate }: TodoListProps) => {
           </div>
 
           <HStack>
-            {/* <Tooltip label="Completed" hasArrow placement="left">
-              <MdOutlineDoneOutline
-                onClick={() => onComplete(todo.id)}
-                size="18px"
-                color="green"
-                cursor="pointer"
-              />
-            </Tooltip> */}
+            <Show below="md">
+              <Tooltip label="Completed" hasArrow placement="left">
+                <MdOutlineDoneOutline
+                  onClick={() => onComplete && onComplete(todo.id)}
+                  size="18px"
+                  color="green"
+                  cursor="pointer"
+                />
+              </Tooltip>
+            </Show>
             <Tooltip label="edit" hasArrow placement="left">
               <FaEdit
                 onClick={() => onUpdate(todo.id)}

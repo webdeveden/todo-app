@@ -37,6 +37,7 @@ const CompletedList = ({ completedList, onSelect, onUndo }: Props) => {
               key={list.id}
               display="flex"
               justifyContent="space-between"
+              textDecoration="line-through"
             >
               <HStack justifyContent="space-between" w="100%">
                 <div>
