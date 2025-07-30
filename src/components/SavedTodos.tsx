@@ -15,12 +15,14 @@ interface Props {
   onClick: (session: SavedSession) => void;
   currentSessionId: number | null;
   onRemove: (session: SavedSession) => void;
+  // onSelectTodo: (session: SavedSession) => void;
 }
 
 const SavedTodos = ({
   savedSessions,
   onClick,
   currentSessionId,
+  // onSelectTodo,
   onRemove,
 }: Props) => {
   return (
@@ -36,46 +38,48 @@ const SavedTodos = ({
         const isActive = currentSessionId === session.id;
 
         return (
-          <Button
-            key={session.id}
-            onClick={() => onClick(session)}
-            my={1}
-            width="100%"
-            textAlign="left"
-            justifyContent="start"
-            flexDirection="column"
-            alignItems="flex-start"
-            whiteSpace="wrap"
-            height="auto"
-            padding={2}
-            // backgroundColor={isActive ? "blue.100" : "transparent"} // Highlight
-            border={isActive ? "2px solid orange" : ""}
-          >
-            <HStack spacing="80px">
-              <Box>
-                <Text fontWeight="bold">{session.name}</Text>
-                <Text fontSize="xs" color="gray.500">
-                  {formattedDateTime}
-                </Text>
-              </Box>
-              <Box>
-                <Tooltip
-                  label="Delete"
-                  hasArrow
-                  justifySelf="right"
-                  paddingLeft={5}
-                  contentEditable
-                >
-                  <MdDeleteForever
-                    onClick={() => onRemove(session)}
-                    size="20px"
-                    color="tomato"
-                    cursor="pointer"
-                  />
-                </Tooltip>
-              </Box>
-            </HStack>
-          </Button>
+          <>
+            <Button
+              key={session.id}
+              onClick={() => onClick(session)}
+              my={1}
+              width="100%"
+              textAlign="left"
+              justifyContent="start"
+              flexDirection="column"
+              alignItems="flex-start"
+              whiteSpace="wrap"
+              height="auto"
+              padding={2}
+              // backgroundColor={isActive ? "blue.100" : "transparent"} // Highlight
+              border={isActive ? "2px solid orange" : ""}
+            >
+              <HStack spacing="80px">
+                <Box>
+                  <Text fontWeight="bold">{session.name}</Text>
+                  <Text fontSize="xs" color="gray.500">
+                    {formattedDateTime}
+                  </Text>
+                </Box>
+                <Box>
+                  <Tooltip
+                    label="Delete"
+                    hasArrow
+                    justifySelf="right"
+                    paddingLeft={5}
+                    contentEditable
+                  >
+                    <MdDeleteForever
+                      onClick={() => onRemove(session)}
+                      size="20px"
+                      color="tomato"
+                      cursor="pointer"
+                    />
+                  </Tooltip>
+                </Box>
+              </HStack>
+            </Button>
+          </>
         );
       })}
     </>

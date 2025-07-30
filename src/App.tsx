@@ -8,6 +8,9 @@ import {
   GridItem,
   Show,
   Text,
+  useBreakpointValue,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import {
   loadSessionsFromStorage,
@@ -23,6 +26,9 @@ import SavedTodos, { type SavedSession } from "./components/SavedTodos";
 import ShowTodo from "./components/ShowTodo";
 import TimeCreated from "./components/TimeCreated";
 import SearchInput from "./components/SearchInput";
+import { MdOutlineNoteAlt } from "react-icons/md";
+import ShowMenu from "./components/ShowMenu";
+import ViewTodo from "./components/ViewTodo";
 
 function App() {
   const [todos, setTodos] = useState<Todo[]>([]);
@@ -33,6 +39,9 @@ function App() {
   const [savedSessions, setSavedSessions] = useState<SavedSession[]>([]);
   const [currentSessionId, setCurrentSessionId] = useState<number | null>(null);
   const [searchText, setSearchText] = useState("");
+  const isMobile = useBreakpointValue({ base: true, lg: false });
+  const menuDisclosure = useDisclosure(); // for Drawer
+  const modalDisclosure = useDisclosure(); // for Modal
 
   const handleSubmit = () => {
     if (!description.trim()) return;
@@ -104,6 +113,8 @@ function App() {
 
   const handleSavedTodoClick = (session: SavedSession) => {
     setCurrentSessionId(session.id);
+    modalDisclosure.onOpen();
+    menuDisclosure.onClose();
     // setSearchText(" ");
   };
 
@@ -182,7 +193,25 @@ function App() {
       templateColumns={{ base: "1fr", lg: "300px 1fr 500px" }}
     >
       <GridItem area="nav">
-        <NavBar />
+        <NavBar onMenuClick={menuDisclosure.onOpen} />
+        <ShowMenu
+          savedSessions={savedSessions}
+          currentSessionId={currentSessionId}
+          onRemove={handleRemoveSaveTodo}
+          onSearch={(text) => setSearchText(text)}
+          onClick={handleSavedTodoClick}
+          onClose={menuDisclosure.onClose}
+          isOpen={menuDisclosure.isOpen}
+        />
+        {isMobile && selectedSession && (
+          <ViewTodo
+            isOpen={modalDisclosure.isOpen}
+            onClose={modalDisclosure.onClose}
+            showSavedSessions={selectedSession}
+            onSessionUpdate={handleSessionUpdate}
+            onSessionSaved={handleSessionSaved}
+          />
+        )}
       </GridItem>
 
       <Show above="lg">
@@ -202,12 +231,17 @@ function App() {
         <GridItem area="asideRight" marginTop={5} paddingX={5}>
           <Card>
             <CardBody>
-              {selectedSession && (
+              {selectedSession ? (
                 <ShowTodo
                   showSavedSessions={selectedSession}
                   onSessionUpdate={handleSessionUpdate}
                   onSessionSaved={handleSessionSaved}
                 />
+              ) : (
+                <VStack justifyContent="center" alignItems="center" gap={5}>
+                  <MdOutlineNoteAlt size="32px" />
+                  <Text>No note opened</Text>
+                </VStack>
               )}
             </CardBody>
           </Card>
@@ -216,7 +250,7 @@ function App() {
 
       <GridItem area="main" marginTop={5}>
         <Card padding={2}>
-          <TodoNavbar onClick={handleNewTodo} />
+          <TodoNavbar onClick={handleNewTodo} onSave={handleNewTodo} />
           <TimeCreated />
           <TodoForm
             description={description}
